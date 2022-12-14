@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.codelab.basics.ui.theme.BasicsCodelabTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,20 +29,33 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun OnboardingScreen(modifier: Modifier = Modifier) {
-    // TODO : This state should be hoisted
-    var shouldShowOnboarding = remember {
-        mutableStateOf(true)
+private fun MyApp(modifier: Modifier = Modifier) {
+    var shouldShowOnboarding by remember { mutableStateOf(true) }
+    Surface(modifier) {
+        if (shouldShowOnboarding) {
+            OnboardingScreen(onContinueClicked = {
+                shouldShowOnboarding = false
+            })
+        } else {
+            Greetings()
+        }
     }
+}
+
+@Composable
+fun OnboardingScreen(
+    onContinueClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Arrangement.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Welcome to the Basics Code-lab!")
         Button(
             modifier = Modifier.padding(vertical = 24.dp),
-            onClick = { shouldShowOnboarding = false }
+            onClick = onContinueClicked
         ) {
             Text(text = "Continue")
         }
@@ -47,14 +63,22 @@ fun OnboardingScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun MyApp(
+private fun Greetings(
     modifier: Modifier = Modifier,
     names: List<String> = listOf("World", "Compose")
 ) {
-    Column(modifier = modifier.padding(vertical = 10.dp)) {
+    Column(modifier = modifier.padding(vertical = 4.dp)) {
         for (name in names) {
             Greeting(name = name)
         }
+    }
+}
+
+@Preview(showBackground = true, widthDp = 320, heightDp = 320)
+@Composable
+fun OnboardingPreview() {
+    BasicsCodelabTheme {
+        OnboardingScreen({})
     }
 }
 
@@ -90,8 +114,16 @@ fun Greeting(name: String) {
 
 @Preview(showBackground = true, widthDp = 320)
 @Composable
+fun GreetingPreview() {
+    BasicsCodelabTheme {
+        Greetings()
+    }
+}
+
+@Preview(showBackground = true, widthDp = 320)
+@Composable
 fun DefaultPreview() {
     BasicsCodelabTheme {
-        MyApp()
+        MyApp(Modifier.fillMaxSize())
     }
 }
