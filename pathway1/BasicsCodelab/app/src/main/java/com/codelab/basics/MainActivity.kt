@@ -22,7 +22,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.coerceAtLeast
 
@@ -42,9 +46,7 @@ private fun MyApp(modifier: Modifier = Modifier) {
     var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
     Surface(modifier) {
         if (shouldShowOnboarding) {
-            OnboardingScreen(onContinueClicked = {
-                shouldShowOnboarding = false
-            })
+            OnboardingScreen(onContinueClicked = { shouldShowOnboarding = false })
         } else {
             Greetings()
         }
@@ -117,14 +119,20 @@ fun Greeting(name: String) {
                     style = MaterialTheme.typography.h6
                         .copy(fontWeight = FontWeight.ExtraBold)
                 )
+                if (expanded) {
+                    Text(text = ("나는 나는 미소미소다. " +
+                            "만나서 반갑습니다.").repeat(4) )
+                }
             }
-            OutlinedButton(onClick = {
+            IconButton(onClick = {
                 expanded = !expanded
             }) {
-                Text(text = if (expanded) {
-                    "Show less"
+                Icon(
+                imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
+                contentDescription = if (expanded) {
+                    stringResource(R.string.show_less)
                 } else {
-                    "Show more"
+                    stringResource(R.string.show_more)
                 })
             }
         }
@@ -139,13 +147,13 @@ fun GreetingPreview() {
     }
 }
 
+@Preview(showBackground = true, widthDp = 320)
 @Preview(
     showBackground = true,
     widthDp = 320,
     uiMode = UI_MODE_NIGHT_YES,
     name = "Dark"
 )
-@Preview(showBackground = true, widthDp = 320)
 @Composable
 fun DefaultPreview() {
     BasicsCodelabTheme {
