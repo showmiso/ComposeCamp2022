@@ -19,11 +19,5 @@ fun StatefulCounter(
     var waterCount by rememberSaveable {
         mutableStateOf(0)
     }
-    var juiceCount by rememberSaveable {
-        mutableStateOf(0)
-    }
-    Column {
-        StatelessCounter(count = waterCount, onIncrement = { waterCount++ }, modifier)
-        StatelessCounter(count = juiceCount, onIncrement = { juiceCount++ }, modifier)
-    }
+    StatelessCounter(count = waterCount, onIncrement = { waterCount++ }, modifier)
 }
