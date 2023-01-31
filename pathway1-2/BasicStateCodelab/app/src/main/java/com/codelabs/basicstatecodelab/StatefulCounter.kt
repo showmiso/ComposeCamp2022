@@ -1,5 +1,6 @@
 package com.codelabs.basicstatecodelab
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -15,8 +16,14 @@ import androidx.compose.runtime.*
 fun StatefulCounter(
     modifier: Modifier = Modifier
 ) {
-    var count by rememberSaveable {
+    var waterCount by rememberSaveable {
         mutableStateOf(0)
     }
-    StatelessCounter(count = count, onIncrement = { count++ }, modifier)
+    var juiceCount by rememberSaveable {
+        mutableStateOf(0)
+    }
+    Column {
+        StatelessCounter(count = waterCount, onIncrement = { waterCount++ }, modifier)
+        StatelessCounter(count = juiceCount, onIncrement = { juiceCount++ }, modifier)
+    }
 }
